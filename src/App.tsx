@@ -140,7 +140,11 @@ export default function App() {
     setResult(null);
     
     try {
-      const res = await fetch(`https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(url)}`);
+      // Using a CORS proxy to bypass the browser's CORS policy
+      const targetUrl = `https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(url)}`;
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+      
+      const res = await fetch(proxyUrl);
       if (!res.ok) throw new Error('Could not find links for this URL. Make sure it is a valid music link.');
       const data = await res.json();
       setResult(data);
